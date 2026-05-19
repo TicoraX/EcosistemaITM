@@ -8,7 +8,8 @@ services:
     container_name: itm-database
     environment:
       - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=SuperPassword123! # ¡Nivel 5: En producción esto se oculta!
+      # La contraseña se inyecta desde la variable DB_PASSWORD declarada en el archivo .env
+      - MSSQL_SA_PASSWORD=${DB_PASSWORD}
     ports:
       - "1433:1433" # Mapeamos el puerto de SQL Server
     networks:
@@ -28,8 +29,8 @@ services:
       - "8080:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
-      # Conexión apuntando al servicio db-sqlserver dentro de la red interna de Docker
-      - 'ConnectionStrings__DefaultConnection=Server=db-sqlserver;Database=GestionITM;User Id=sa;Password=SuperPassword123!;TrustServerCertificate=True;'
+      # La contraseña de la cadena de conexión se lee de forma dinámica desde el entorno
+      - 'ConnectionStrings__DefaultConnection=Server=db-sqlserver;Database=GestionITM;User Id=sa;Password=${DB_PASSWORD};TrustServerCertificate=True;'
     networks:
       - itm-network
 

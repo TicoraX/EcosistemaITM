@@ -32,6 +32,8 @@ artifacts/
 ## Local Configuration
 appsettings.Local.json
 *.local.json
+.env
+
 
 ## Logs
 logs/
