@@ -1,12 +1,12 @@
-#  Ecosistema ITM Nivel 5 - Taller Final Integrador
+# Ecosistema ITM Nivel 5 - Taller Final Integrador
 
-¡Bienvenido al **Ecosistema ITM Nivel 5**! Este es el proyecto final integrador de la asignatura de **Programación de Software**. Aquí se implementa una solución completa **End-to-End** (Backend API + Frontend Móvil) que modela el **Módulo de Matrículas** del ITM siguiendo los estándares de seguridad, arquitectura y robustez más rigurosos de la industria.
+Este repositorio contiene el proyecto final integrador para la asignatura de Programación de Software. La solución implementa un sistema completo (Backend API y Frontend Móvil) para el Módulo de Matrículas del ITM, aplicando principios de arquitectura limpia, seguridad y buenas prácticas de desarrollo.
 
 ---
 
-##  Arquitectura de la Solución (Clean Architecture)
+## Arquitectura de la Solución
 
-El proyecto está diseñado bajo los principios de **Clean Architecture** (Arquitectura Limpia), aislando por completo la lógica de negocio central de los detalles tecnológicos (bases de datos, controladores HTTP, frameworks).
+El proyecto está estructurado bajo los lineamientos de Arquitectura Limpia (Clean Architecture), lo que permite separar la lógica de negocio central de los detalles de infraestructura (bases de datos, frameworks y controladores HTTP).
 
 ```text
                ┌───────────────────────────────────────────────┐
@@ -29,78 +29,78 @@ El proyecto está diseñado bajo los principios de **Clean Architecture** (Arqui
  └───────────────────────────────────────────────────────────────────────────┘
 ```
 
-###  Estructura de Directorios
+### Estructura de Directorios
 
-- **`src/`** (Código de producción):
-  - **`GestionITM.Domain/`**: El núcleo de la aplicación. Contiene las entidades (`Matricula`, `Curso`, `Estudiante`), las interfaces de servicios y repositorios (`IMatriculaService`, `IMatriculaRepository`), y los DTOs (`MatriculaCreateDto`, `MatriculaDto`). **100% libre de dependencias externas.**
-  - **`GestionITM.Infrastructure/`**: Contiene la implementación de la persistencia de datos con **EF Core / SQL Server** (`ApplicationDbContext`), los repositorios concretos y los servicios que implementan las reglas de negocio (`MatriculaService`).
-  - **`GestionITM.API/`**: Capa de presentación HTTP. Contiene los controladores expuestos (`MatriculaController` con seguridad JWT, `CursoController` con paginación) y middlewares globales de excepción.
-  - **`GestionITM.AppMovil/`**: Frontend multiplataforma en **.NET MAUI** estructurado en MVVM, con interceptor HTTP seguro para adjuntar el JWT, soporte para carga paginada infinita y alertas elegantes ante errores 400.
-- **`tests/`** (Pruebas unitarias):
-  - **`GestionITM.Tests/`**: Pruebas automatizadas en xUnit para verificar las reglas de negocio de matrículas.
-- **`postman/`** (Colección de pruebas):
-  - Contiene la colección lista para importar en Postman y verificar la API en segundos.
-- **`.github/workflows/`** (CI/CD):
-  - Contiene el pipeline de **GitHub Actions** (`ci.yml`) que compila la solución y corre todas las pruebas unitarias automáticamente en cada Push.
+La solución se divide en las siguientes carpetas:
+
+- **`src/`** (Código fuente de producción):
+  - **`GestionITM.Domain/`**: Núcleo de la aplicación. Define las entidades de negocio (`Matricula`, `Curso`, `Estudiante`), las interfaces de servicios y repositorios (`IMatriculaService`, `IMatriculaRepository`), y los DTOs (`MatriculaCreateDto`, `MatriculaDto`). No tiene dependencias externas.
+  - **`GestionITM.Infrastructure/`**: Implementa la persistencia de datos mediante Entity Framework Core con SQL Server, la configuración del contexto de base de datos (`ApplicationDbContext`), los repositorios concretos y el servicio de matrículas (`MatriculaService`).
+  - **`GestionITM.API/`**: Capa de presentación HTTP. Contiene los controladores (`MatriculaController` protegido con JWT, `CursoController` con soporte para paginación) y el middleware para el manejo global de excepciones.
+  - **`GestionITM.AppMovil/`**: Aplicación móvil multiplataforma desarrollada en .NET MAUI. Sigue el patrón MVVM e incluye un interceptor de red para adjuntar el token JWT, soporte para scroll infinito y un manejo de errores robusto.
+- **`tests/`** (Pruebas del sistema):
+  - **`GestionITM.Tests/`**: Pruebas unitarias escritas en xUnit para validar las reglas de negocio de la capa de servicio.
+- **`postman/`** (Pruebas de endpoints):
+  - Colección de solicitudes HTTP en formato JSON lista para importar en Postman.
+- **`.github/workflows/`** (Integración Continua):
+  - Pipeline de GitHub Actions (`ci.yml`) que compila la solución y ejecuta las pruebas de forma automatizada.
 
 ---
 
 ## Tecnologías y Características Implementadas
 
-- **Backend:** ASP.NET Core Web API / .NET 8.
-- **Persistencia:** Entity Framework Core con SQL Server.
-- **Seguridad:** Autenticación por Tokens **JWT** con seguridad por Roles (Rol "Estudiante" requerido para matricular).
-- **Paginación:** Patrón `PagedResult<T>` en backend y **Scroll Infinito** (`RemainingItemsThresholdReached`) en la App Móvil.
-- **Regla de Negocio Sólida:** Excepción controlada si se intenta matricular un curso sin `CuposDisponibles` (Controlado en `MatriculaService`, nunca en los controladores).
-- **Dockerización Completa:** Dockerfile multi-etapa y orquestación con Docker Compose.
-- **Observabilidad:** Serilog configurado para volcar trazas y errores en archivos diarios dentro del directorio local `/Logs`.
+- **Backend:** ASP.NET Core Web API con .NET 8.
+- **Base de Datos:** SQL Server gestionado a través de Entity Framework Core.
+- **Seguridad:** Autenticación y autorización mediante Tokens JWT con validación de roles (se requiere el rol de Estudiante para realizar una matrícula).
+- **Paginación:** Implementación del patrón `PagedResult<T>` en el backend y consumo mediante scroll infinito en la aplicación móvil.
+- **Reglas de Negocio:** Validación controlada a nivel de servicio para verificar la disponibilidad de cupos en un curso antes de confirmar la matrícula.
+- **DevOps:** Dockerización multietapa para la API y orquestación del entorno completo mediante Docker Compose.
+- **Observabilidad:** Registro de eventos del sistema y errores en archivos físicos diarios utilizando Serilog, guardados en el directorio `/Logs`.
 
 ---
 
-## Cómo Ejecutar la Solución
+## Instrucciones para Ejecutar la Solución
 
-### Opción A: Orquestación Local Completa (Docker Compose)
+### Opción A: Ejecución en contenedores con Docker Compose
 
-Puedes levantar todo el ecosistema (Base de Datos SQL Server + API Web) con una sola línea de comandos desde la raíz del repositorio:
+Es posible levantar toda la infraestructura (Base de datos SQL Server y la API Web) ejecutando el siguiente comando en la raíz del repositorio:
 
 ```bash
 docker-compose up -d --build
 ```
 
-Esto levantará los siguientes servicios en paralelo en una red privada virtual de Docker:
-- **Base de Datos (`itm-database`):** SQL Server escuchando en el puerto `1433`.
-- **API Backend (`itm-api`):** Web API en .NET 8 disponible en `http://localhost:8080` (con Swagger activo en `http://localhost:8080/swagger`).
+Este comando inicia los siguientes servicios dentro de una red privada de Docker:
+- **Base de Datos (`itm-database`):** Instancia de SQL Server escuchando en el puerto `1433`.
+- **API Backend (`itm-api`):** API Web disponible en `http://localhost:8080`, con la documentación de Swagger accesible en `http://localhost:8080/swagger`.
 
-Para apagar la flota:
+Para detener los servicios:
 ```bash
 docker-compose down
 ```
 
-### Opción B: Ejecución en Visual Studio o VS Code
+### Opción B: Ejecución nativa en Visual Studio
 
-1. Abre la solución unificada **`EcosistemaITM.slnx`** en Visual Studio.
-2. Asegúrate de configurar las migraciones y aplicar la base de datos si corres de forma nativa:
+1. Abra el archivo de solución unificada `EcosistemaITM.slnx` en Visual Studio.
+2. Si ejecuta el proyecto localmente y necesita aplicar las migraciones a su propia base de datos:
    ```bash
    dotnet ef database update --project src/GestionITM.Infrastructure --startup-project src/GestionITM.API
    ```
-3. Ejecuta el proyecto `GestionITM.API` para levantar el backend y abre el proyecto de la App Móvil `GestionITM.AppMovil` en el emulador de Android o dispositivo iOS de tu preferencia.
+3. Inicie el proyecto `GestionITM.API` como proyecto de arranque y ejecute la aplicación móvil `GestionITM.AppMovil` desde el emulador o dispositivo físico de su preferencia.
 
 ---
 
-## Pruebas con Postman
+## Pruebas de Endpoints con Postman
 
-En la carpeta [postman/](file:///c:/Users/santi/OneDrive/Documents/Programacion/EcosistemaITM/postman/) encontrarás la colección lista para importar en Postman.
+En la carpeta [postman/](file:///c:/Users/santi/OneDrive/Documents/Programacion/EcosistemaITM/postman/) se incluye la colección JSON para realizar pruebas.
 
-La colección contiene:
-1. **Iniciar Sesión:** Envía credenciales de un estudiante de prueba, extrae el token JWT devuelto y lo configura automáticamente en las variables del entorno de Postman.
-2. **Cursos Paginados:** Obtiene el listado de cursos paginados listo para simular el scroll infinito.
-3. **Matricular Curso (Con Cupos):** Petición POST autenticada con JWT para matricular de forma exitosa.
-4. **Matricular Curso (Sin Cupos - Error 400):** Verifica que al matricular un curso sin cupos disponibles, la API devuelva un código `400 BadRequest` con un mensaje amigable estructurado por la regla de negocio.
+La colección contiene los siguientes flujos preparados:
+1. **Iniciar Sesión:** Permite enviar las credenciales del estudiante, obtener el token JWT y configurarlo de forma automática como variable de entorno en Postman.
+2. **Cursos Paginados:** Consulta el catálogo de cursos paginados para simular el comportamiento del scroll infinito.
+3. **Matricular Curso:** Envía una solicitud de matrícula autenticada con token JWT.
+4. **Matricular Curso (Sin Cupo):** Valida la regla de negocio al intentar matricular un curso sin cupos disponibles, verificando que la API retorne un código de respuesta `400 BadRequest` con un mensaje descriptivo.
 
 ---
 
-## Guía para la Sustentación Final
+## Guía de Sustentación y Entrega
 
-Encuentra las pautas completas, estructura recomendada para tu reporte PDF y el guion sugerido para tu video de sustentación de 3 minutos en el archivo interactivo: **`GUIA_ENTREGA.md`** en la raíz de este proyecto.
-
-¡Mucho éxito con tu sustentación final! 🚀
+En la raíz del proyecto se encuentra el archivo `GUIA_ENTREGA.md`, el cual contiene indicaciones detalladas sobre cómo estructurar el documento PDF final y un guion sugerido para la grabación del video demostrativo de sustentación.

@@ -1,69 +1,60 @@
-# Guía de Entrega: Taller Final Integrador "El Ecosistema ITM Nivel 5" 🚀
+# Guía de Entrega: Taller Final Integrador "El Ecosistema ITM Nivel 5"
 
-¡Felicidades por llegar hasta aquí! El código ya cumple con todos los requisitos técnicos para una nota de **5.0**. Ahora es fundamental que la presentación y entrega sean igual de profesionales. 
-
-Sigue esta guía paso a paso para armar tu documento PDF y grabar tu video demostrativo.
+Este documento contiene las pautas sugeridas para estructurar la entrega del proyecto final y preparar la sustentación técnica ante el docente.
 
 ---
 
-## 📄 Parte 1: Preparar el Documento PDF
+## Parte 1: Preparación del Documento PDF
 
-El profesor especificó claramente: **NADA DE ARCHIVOS .ZIP**. Debes subir a la plataforma únicamente un documento PDF. Te sugiero esta estructura para el documento:
+Según las indicaciones del taller, no deben subirse archivos comprimidos (.zip). Toda la sustentación escrita debe presentarse en un único documento PDF con la siguiente estructura sugerida:
 
-1. **Portada:** Tu nombre, nombre de tu compañero (si aplica), asignatura y título del proyecto.
+1. **Portada:** Nombre del estudiante (o de la pareja), asignatura, fecha y título del proyecto.
 2. **Enlace al Repositorio de GitHub:** 
-   * Asegúrate de que el repositorio sea público o de invitar al profesor si es privado.
-   * *Nota:* Asegúrate de haber hecho un `git push` con todos los cambios que hicimos (Fase A, GitHub Actions, Docker).
-3. **Evidencia de CI/CD (Puntos Extra ✅):**
-   * Ve a la pestaña **"Actions"** en tu repositorio de GitHub.
-   * Toma un pantallazo (screenshot) donde se vea claramente el chulito verde de éxito del workflow `CI Pipeline` que creamos.
-   * Pega esa imagen en el PDF.
+   * Asegúrese de que el repositorio sea público para facilitar la revisión del código.
+   * Verifique haber realizado la sincronización (`git push`) de todos los archivos y configuraciones correspondientes al backend, la aplicación móvil y DevOps.
+3. **Evidencia de Integración Continua (CI/CD):**
+   * En la pestaña "Actions" del repositorio de GitHub, tome una captura de pantalla del pipeline completado con éxito.
+   * Adjunte la imagen en esta sección como constancia del funcionamiento automático de las pruebas.
 4. **Colección de Postman:**
-   * Entra a Postman, haz clic derecho en tu colección de pruebas y selecciona "Export" o "Share -> Via API/Link".
-   * Pega el enlace público o indica que adjuntas el archivo `.json` de la colección junto con la entrega (si la plataforma permite múltiples archivos, aunque el PDF con un enlace público es mejor).
+   * Exporte la colección de Postman e incluya en el PDF el enlace de acceso público o el texto JSON correspondiente para que el docente pueda replicar las pruebas.
 5. **Enlace del Video Demostrativo:**
-   * Pega el enlace de tu video subido a YouTube (configurado como "Oculto" / "Unlisted").
+   * Inserte el enlace directo al video explicativo subido a una plataforma como YouTube (se recomienda configurarlo en modo "Oculto" o "No listado").
 
 ---
 
-## 🎥 Parte 2: El Video Demostrativo (Máximo 3 Minutos)
+## Parte 2: Video Demostrativo (Máximo 3 Minutos)
 
-El video debe ir directo al grano. Tienes que demostrar los 4 puntos exactos que pidió el profesor.
+El video debe ser conciso y enfocado en validar los requisitos técnicos fundamentales solicitados. A continuación, se presenta una propuesta de guion técnico:
 
-**💡 Guion Sugerido para el Video:**
-
-* **[0:00 - 0:10] Presentación:** 
-  > *"Hola profesor, presento mi Taller Final Integrador nivel 5. A continuación la demostración técnica."*
+* **[0:00 - 0:10] Introducción:** 
+  > "Presentación del proyecto correspondiente al Módulo de Matrículas del Ecosistema ITM Nivel 5. A continuación, inicia la demostración técnica."
 
 * **[0:10 - 0:40] Requisito 1: Infraestructura y Docker:** 
-  * Abre una terminal limpia y escribe el comando `docker-compose up -d`.
-  * Muestra cómo en pocos segundos dicen `Started` los contenedores `itm-database` e `itm-api`.
-  * > *"Como puede ver, la arquitectura está dockerizada de forma multietapa. Levantamos la Base de Datos y la API simultáneamente con docker-compose."*
+  * Con una terminal limpia, ejecute el comando `docker-compose up -d`.
+  * Muestre el estado activo de los contenedores de la API (`itm-api`) y de la base de datos (`itm-database`).
+  * > "La arquitectura se encuentra completamente dockerizada mediante un proceso de construcción multietapa. Levantamos de forma simultánea la base de datos SQL Server y el servicio Web API en un entorno virtualizado y conectado."
 
-* **[0:40 - 1:10] Requisito 2: App Móvil y Autenticación:** 
-  * Muestra el emulador de Android (o tu celular) con la App MAUI abierta en la pantalla de Login.
-  * Ingresa los datos y presiona entrar. 
-  * > *"Aquí tenemos el frontend en MAUI. Realizamos el Login y el token JWT se guarda automáticamente usando SecureStorage. Además, tenemos un Interceptor configurado para todas las siguientes peticiones."*
+* **[0:40 - 1:10] Requisito 2: Aplicación Móvil y Autenticación:** 
+  * Muestre el emulador con la pantalla de inicio de sesión de la aplicación .NET MAUI.
+  * Ingrese las credenciales de prueba y acceda al sistema.
+  * > "El frontend móvil está desarrollado en .NET MAUI. Tras un inicio de sesión exitoso, el token JWT devuelto por el servidor se almacena localmente de forma segura en el dispositivo mediante SecureStorage. Adicionalmente, se cuenta con un interceptor HTTP que adjunta automáticamente este token en las cabeceras de todas las solicitudes subsiguientes."
 
 * **[1:10 - 1:40] Requisito 3: Catálogo y Paginación:** 
-  * Muestra la pantalla del catálogo de cursos.
-  * Haz scroll lentamente hacia abajo para que se vea cómo cargan nuevos cursos automáticamente.
-  * > *"Implementamos el catálogo de cursos con CollectionView. Aplicamos el patrón PagedResult en el backend y el Scroll Infinito en el frontend para no saturar la base de datos."*
+  * Navegue por el catálogo de cursos realizando un desplazamiento (scroll) hacia abajo para mostrar la carga dinámica.
+  * > "El catálogo de cursos hace uso de CollectionView y el evento RemainingItemsThresholdReached. Se consume un endpoint paginado en el backend bajo el patrón PagedResult, lo que permite implementar scroll infinito en la aplicación para optimizar el rendimiento y el tráfico de red."
 
-* **[1:40 - 2:30] Requisito 4: Reglas de Negocio y Resiliencia (UX):** 
-  * Selecciona un curso que **no tenga cupos** e intenta matricularte.
-  * Muestra cómo sale la alerta emergente (pop-up) amigable en la pantalla.
-  * > *"Finalmente, probamos la resiliencia y la separación de capas. Al intentar tomar un curso sin cupos, el servicio del backend lanza una excepción controlada (Regla de negocio). La App no colapsa, sino que captura el error 400 y lo muestra en este DisplayAlert amigable para el usuario."*
+* **[1:40 - 2:30] Requisito 4: Reglas de Negocio y Resiliencia en UX:** 
+  * Seleccione un curso con cupo cero e intente realizar la matrícula para forzar el error controlado.
+  * Muestre en pantalla la alerta emergente que explica la situación.
+  * > "Para garantizar la robustez, el servicio en la capa de infraestructura valida la disponibilidad de cupos antes de procesar una matrícula. Si el curso no dispone de capacidad, se lanza una excepción de negocio que la API expone como un error 400. La aplicación móvil intercepta este error y presenta un cuadro de diálogo amigable al usuario en lugar de interrumpir la ejecución de la app."
 
-* **[2:30 - 2:40] Despedida:** 
-  > *"Con esto cumplo todos los requerimientos técnicos y de arquitectura limpia. Muchas gracias."*
+* **[2:30 - 2:40] Conclusión:** 
+  > "Con esta demostración se valida el cumplimiento de las reglas de negocio, la arquitectura por capas y los estándares solicitados para el integrador. Muchas gracias por su atención."
 
 ---
 
-## 🛠️ Últimos preparativos antes de grabar
+## Recomendaciones Técnicas Previas a la Grabación
 
-1. **Verifica la Base de Datos:** Asegúrate de tener al menos un par de cursos creados en la base de datos (puedes crearlos con Swagger `http://localhost:8080/swagger`), y asegúrate de que **al menos uno tenga 0 `CuposDisponibles`** para poder probar el error en el video.
-2. **Ensaya:** Haz un recorrido de prueba sin grabar para asegurarte de que todo carga rápido y que el emulador del celular responde bien. 
-3. **Limpia la terminal:** Antes de grabar, ejecuta `docker-compose down` para apagar los contenedores, así cuando grabes el `docker-compose up` se verá cómo se levantan desde cero.
-
-¡Mucho éxito con tu presentación y a por ese 5.0! 🎉
+1. **Preparación de la Base de Datos:** Verifique con anticipación que haya registros de cursos creados en la base de datos, y asegúrese de que al menos uno de ellos tenga la columna de cupos disponibles en 0 para poder recrear la validación del error durante el video.
+2. **Prueba de Red en Emuladores:** Si realiza la prueba desde un emulador de Android o un dispositivo físico, asegúrese de que la dirección IP configurada en `MauiProgram.cs` apunte a la IP de red local del equipo donde corre la API, en lugar de `localhost`.
+3. **Limpieza del Entorno:** Ejecute `docker-compose down` antes de iniciar la grabación para poder mostrar en tiempo real cómo arranca toda la infraestructura desde cero.
