@@ -1,10 +1,10 @@
-# 🎓 Ecosistema ITM Nivel 5 - Taller Final Integrador
+#  Ecosistema ITM Nivel 5 - Taller Final Integrador
 
 ¡Bienvenido al **Ecosistema ITM Nivel 5**! Este es el proyecto final integrador de la asignatura de **Programación de Software**. Aquí se implementa una solución completa **End-to-End** (Backend API + Frontend Móvil) que modela el **Módulo de Matrículas** del ITM siguiendo los estándares de seguridad, arquitectura y robustez más rigurosos de la industria.
 
 ---
 
-## 🏛️ Arquitectura de la Solución (Clean Architecture)
+##  Arquitectura de la Solución (Clean Architecture)
 
 El proyecto está diseñado bajo los principios de **Clean Architecture** (Arquitectura Limpia), aislando por completo la lógica de negocio central de los detalles tecnológicos (bases de datos, controladores HTTP, frameworks).
 
@@ -29,7 +29,7 @@ El proyecto está diseñado bajo los principios de **Clean Architecture** (Arqui
  └───────────────────────────────────────────────────────────────────────────┘
 ```
 
-### 📂 Estructura de Directorios
+###  Estructura de Directorios
 
 - **`src/`** (Código de producción):
   - **`GestionITM.Domain/`**: El núcleo de la aplicación. Contiene las entidades (`Matricula`, `Curso`, `Estudiante`), las interfaces de servicios y repositorios (`IMatriculaService`, `IMatriculaRepository`), y los DTOs (`MatriculaCreateDto`, `MatriculaDto`). **100% libre de dependencias externas.**
@@ -45,7 +45,7 @@ El proyecto está diseñado bajo los principios de **Clean Architecture** (Arqui
 
 ---
 
-## 🚀 Tecnologías y Características Implementadas
+## Tecnologías y Características Implementadas
 
 - **Backend:** ASP.NET Core Web API / .NET 8.
 - **Persistencia:** Entity Framework Core con SQL Server.
@@ -57,7 +57,7 @@ El proyecto está diseñado bajo los principios de **Clean Architecture** (Arqui
 
 ---
 
-## 🛠️ Cómo Ejecutar la Solución
+## Cómo Ejecutar la Solución
 
 ### Opción A: Orquestación Local Completa (Docker Compose)
 
@@ -87,7 +87,7 @@ docker-compose down
 
 ---
 
-## 📬 Pruebas con Postman
+## Pruebas con Postman
 
 En la carpeta [postman/](file:///c:/Users/santi/OneDrive/Documents/Programacion/EcosistemaITM/postman/) encontrarás la colección lista para importar en Postman.
 
@@ -99,7 +99,7 @@ La colección contiene:
 
 ---
 
-## 📄 Guía para la Sustentación Final
+## Guía para la Sustentación Final
 
 Encuentra las pautas completas, estructura recomendada para tu reporte PDF y el guion sugerido para tu video de sustentación de 3 minutos en el archivo interactivo: **`GUIA_ENTREGA.md`** en la raíz de este proyecto.
 
