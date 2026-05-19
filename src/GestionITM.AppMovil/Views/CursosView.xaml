@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GestionITM.AppMovil.Views.CursosView"
+             Title="🎓 Ecosistema ITM - Matrículas">
+
+    <Grid RowDefinitions="Auto, *">
+        <!-- Encabezado Estético -->
+        <VerticalStackLayout Grid.Row="0" Padding="15" BackgroundColor="#1E293B">
+            <Label Text="Cursos Disponibles" TextColor="White" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center"/>
+            <Label Text="Desliza para cargar más cursos en tiempo real" TextColor="#94A3B8" FontSize="12" HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+
+        <!-- Catálogo de Cursos con Scroll Infinito -->
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Cursos}"
+                        RemainingItemsThreshold="2"
+                        RemainingItemsThresholdReachedCommand="{Binding CargarMasCursosCommand}"
+                        Padding="10">
+            
+            <CollectionView.EmptyView>
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Padding="30">
+                    <Label Text="No hay cursos cargados aún." FontSize="16" HorizontalTextAlignment="Center" TextColor="Gray"/>
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="0,0,0,10" Padding="15" CornerRadius="12" BorderColor="#E2E8F0" HasShadow="True">
+                        <Grid ColumnDefinitions="*, Auto">
+                            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                <Label Text="{Binding Nombre}" FontSize="18" FontAttributes="Bold" TextColor="#1E293B" />
+                                <Label Text="{Binding Codigo, StringFormat='Código: {0}'}" TextColor="#64748B" FontSize="13" />
+                                <Label Text="{Binding CuposDisponibles, StringFormat='Cupos Disponibles: {0}'}" 
+                                       FontAttributes="Italic"
+                                       TextColor="#059669" />
+                            </VerticalStackLayout>
+                            
+                            <!-- Botón Matricularse -->
+                            <Button Grid.Column="1" 
+                                    Text="Matricular" 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=BindingContext.MatricularCommand}"
+                                    CommandParameter="{Binding .}" 
+                                    BackgroundColor="#2563EB"
+                                    TextColor="White"
+                                    CornerRadius="8"
+                                    VerticalOptions="Center"
+                                    Padding="12,6"/>
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

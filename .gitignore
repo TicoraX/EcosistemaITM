@@ -1,0 +1,56 @@
+## Visual Studio
+.vs/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]in/
+[Oo]bj/
+*.user
+*.userosscache
+*.sln.docstates
+
+## VS Code
+.vscode/
+.history/
+*.code-workspace
+
+## .NET Core / ASP.NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+**/Properties/launchSettings.json
+
+## Rider / JetBrains
+.idea/
+*.sln.iml
+
+## Docker
+.dockerignore
+# Aunque a veces es útil tener el .dockerignore, aquí lo dejamos fuera si queremos.
+
+## Local Configuration
+appsettings.Local.json
+*.local.json
+
+## Logs
+logs/
+*.log
+src/GestionITM.API/Logs/
+
+## MAUI / Xamarin
+[Bb]in/
+[Oo]bj/
+*.suo
+*.user
+*.userprefs
+*.sln.docstates
+*.mdf
+*.ldf
+*.pidb
+
+## OS-generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GestionITM.AppMovil.Views.LoginView"
+             Title="Iniciar Sesión"
+             BackgroundColor="#0F172A">
+
+    <ScrollView VerticalOptions="Center">
+        <VerticalStackLayout Spacing="20" Padding="30" WidthRequest="380" HorizontalOptions="Center">
+            <!-- Icono / Imagen Estética -->
+            <Label Text="🎓" FontSize="72" HorizontalOptions="Center" Margin="0,0,0,10"/>
+            
+            <Label Text="Ecosistema ITM" TextColor="White" FontSize="26" FontAttributes="Bold" HorizontalOptions="Center"/>
+            <Label Text="Ingresa tus credenciales para continuar" TextColor="#94A3B8" FontSize="14" HorizontalOptions="Center" Margin="0,0,0,20"/>
+
+            <!-- Campo de Email -->
+            <Entry Text="{Binding Email}" 
+                   Placeholder="Correo Institucional" 
+                   PlaceholderColor="#64748B" 
+                   TextColor="White"
+                   BackgroundColor="#1E293B"
+                   Keyboard="Email"
+                   HeightRequest="50"/>
+
+            <!-- Campo de Password -->
+            <Entry Text="{Binding Password}" 
+                   Placeholder="Contraseña" 
+                   PlaceholderColor="#64748B" 
+                   TextColor="White"
+                   BackgroundColor="#1E293B"
+                   IsPassword="True"
+                   HeightRequest="50"/>
+
+            <!-- Botón Login -->
+            <Button Text="Acceder" 
+                    Command="{Binding LoginCommand}" 
+                    BackgroundColor="#2563EB"
+                    TextColor="White"
+                    HeightRequest="50"
+                    CornerRadius="8"
+                    FontAttributes="Bold"
+                    Margin="0,10,0,0"/>
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" Color="#2563EB" HorizontalOptions="Center" HeightRequest="30"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

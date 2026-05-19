@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace GestionITM.Domain.Models
+{
+    public class ErrorResponse
+    {
+        public int StatusCode { get; set; }
+        public string Message { get; set; } = string.Empty;
+        public string? Details { get; set; }// solo se llena en desarrollo para no exponer detalles en producción
+    }
+}

@@ -1,0 +1,208 @@
+{
+	"info": {
+		"_postman_id": "8b3df9fb-8772-4638-9e5b-1178c772cb23",
+		"name": "Ecosistema ITM - Matrículas",
+		"description": "Colección de peticiones HTTP para probar el Backend API del Ecosistema ITM Nivel 5 (Autenticación, Catálogo de Cursos Paginado y Matrículas con reglas de negocio controladas).",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Autenticación",
+			"item": [
+				{
+					"name": "1. Iniciar Sesión (Login Estudiante)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.token) {",
+									"    pm.environment.set(\"jwt_token\", jsonData.token);",
+									"    pm.globals.set(\"jwt_token\", jsonData.token);",
+									"    console.log(\"Token guardado automáticamente: \" + jsonData.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"estudiante@itm.edu.co\",\n    \"password\": \"Estudiante123!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/auth/login",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Envía las credenciales del estudiante para obtener el Token JWT y guardarlo en las variables de entorno de Postman de forma automática."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Catálogo de Cursos",
+			"item": [
+				{
+					"name": "2. Cursos Paginados (Scroll Infinito)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/curso/paginado?pageNumber=1&pageSize=10",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"curso",
+								"paginado"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "10"
+								}
+							]
+						},
+						"description": "Obtiene la lista de cursos disponibles paginados usando la estructura PagedResult para la carga bajo demanda en el celular."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Matrículas",
+			"item": [
+				{
+					"name": "3. Matricular Curso (Con Cupo)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"estudianteId\": 1,\n    \"cursoId\": 2,\n    \"periodo\": \"2026-1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/matricula",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"matricula"
+							]
+						},
+						"description": "Matricula un curso usando JWT de Estudiante. Si hay cupos disponibles, la operación se procesa con éxito disminuyendo el cupo."
+					},
+					"response": []
+				},
+				{
+					"name": "4. Matricular Curso (Sin Cupo - Error 400)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"estudianteId\": 1,\n    \"cursoId\": 99,\n    \"periodo\": \"2026-1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/matricula",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"matricula"
+							]
+						},
+						"description": "Demuestra la regla de negocio. Si el curso no tiene cupo o no existe, el API retorna un error 400 BadRequest controlado con un mensaje elegante."
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "jwt_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

@@ -1,0 +1,39 @@
+services: 
+
+  # ----------------------------------------------------
+  # CAMIÓN 1: La Base de Datos (SQL Server para Linux)
+  # ----------------------------------------------------
+  db-sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: itm-database
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=SuperPassword123! # ¡Nivel 5: En producción esto se oculta!
+    ports:
+      - "1433:1433" # Mapeamos el puerto de SQL Server
+    networks:
+      - itm-network
+
+  # ----------------------------------------------------
+  # CAMIÓN 2: Nuestra API de Matrículas y Cursos
+  # ----------------------------------------------------
+  api-gestion:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: itm-api
+    depends_on:
+      - db-sqlserver # La API no arranca si la BD no está lista
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      # Conexión apuntando al servicio db-sqlserver dentro de la red interna de Docker
+      - 'ConnectionStrings__DefaultConnection=Server=db-sqlserver;Database=GestionITM;User Id=sa;Password=SuperPassword123!;TrustServerCertificate=True;'
+    networks:
+      - itm-network
+
+# Red interna privada para que los contenedores se comuniquen
+networks:
+  itm-network:
+    driver: bridge

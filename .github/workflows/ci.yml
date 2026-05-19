@@ -1,0 +1,36 @@
+name: Integracion Continua - Ecosistema ITM
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+jobs:
+  build-and-test-backend:
+    name: Compilar y Testear Backend (API, Domain, Infrastructure)
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Descargar Código (Checkout)
+      uses: actions/checkout@v4
+
+    - name: Configurar Entorno .NET SDK
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restaurar Dependencias del Backend
+      run: |
+        dotnet restore src/GestionITM.Domain/GestionITM.Domain.csproj
+        dotnet restore src/GestionITM.Infrastructure/GestionITM.Infrastructure.csproj
+        dotnet restore src/GestionITM.API/GestionITM.API.csproj
+        dotnet restore tests/GestionITM.Tests/GestionITM.Tests.csproj
+
+    - name: Compilar Solución (Backend)
+      run: |
+        dotnet build src/GestionITM.API/GestionITM.API.csproj --configuration Release --no-restore
+        dotnet build tests/GestionITM.Tests/GestionITM.Tests.csproj --configuration Release --no-restore
+
+    - name: Ejecutar Pruebas Unitarias
+      run: dotnet test tests/GestionITM.Tests/GestionITM.Tests.csproj --configuration Release --no-build --verbosity normal

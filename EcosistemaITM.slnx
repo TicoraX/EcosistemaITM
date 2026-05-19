@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="docker-compose.yml" />
+    <File Path="Dockerfile" />
+    <File Path="README.md" />
+    <File Path="GUIA_ENTREGA.md" />
+  </Folder>
+  <Project Path="src/GestionITM.Domain/GestionITM.Domain.csproj" />
+  <Project Path="src/GestionITM.Infrastructure/GestionITM.Infrastructure.csproj" />
+  <Project Path="src/GestionITM.API/GestionITM.API.csproj" />
+  <Project Path="src/GestionITM.AppMovil/GestionITM.AppMovil.csproj" />
+  <Project Path="tests/GestionITM.Tests/GestionITM.Tests.csproj" />
+</Solution>
