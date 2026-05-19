@@ -59,8 +59,18 @@ public class ApiService
             catch (JsonException)
             {
                 throw new Exception("Error inesperado en el servidor al matricularse.");
-            }
         }
+    }
+
+    public async Task<List<ProfesorModel>> GetProfesoresAsync()
+    {
+        var response = await _httpClient.GetAsync("api/profesor");
+        if (response.IsSuccessStatusCode)
+        {
+            var result = await response.Content.ReadFromJsonAsync<List<ProfesorModel>>();
+            return result ?? new List<ProfesorModel>();
+        }
+        throw new Exception("No se pudo obtener el directorio de profesores.");
     }
 }
 

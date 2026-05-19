@@ -32,6 +32,8 @@ public static class MauiProgram
         builder.Services.AddTransient<LoginViewModel>();
         builder.Services.AddTransient<CursosView>();
         builder.Services.AddTransient<CursosViewModel>();
+        builder.Services.AddTransient<ProfesoresView>();
+        builder.Services.AddTransient<ProfesoresViewModel>();
 
 #if DEBUG
         builder.Logging.AddDebug();

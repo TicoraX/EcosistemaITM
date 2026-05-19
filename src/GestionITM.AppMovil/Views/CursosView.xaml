@@ -5,11 +5,24 @@
              Title="🎓 Ecosistema ITM - Matrículas">
 
     <Grid RowDefinitions="Auto, *">
-        <!-- Encabezado Estético -->
-        <VerticalStackLayout Grid.Row="0" Padding="15" BackgroundColor="#1E293B">
-            <Label Text="Cursos Disponibles" TextColor="White" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center"/>
-            <Label Text="Desliza para cargar más cursos en tiempo real" TextColor="#94A3B8" FontSize="12" HorizontalOptions="Center"/>
-        </VerticalStackLayout>
+        <!-- Encabezado Estético con Acceso al Directorio de Profesores -->
+        <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Padding="15" BackgroundColor="#1E293B">
+            <VerticalStackLayout Grid.Column="0" Spacing="2" VerticalOptions="Center">
+                <Label Text="Cursos Disponibles" TextColor="White" FontSize="20" FontAttributes="Bold"/>
+                <Label Text="Desliza para cargar más cursos en tiempo real" TextColor="#94A3B8" FontSize="12"/>
+            </VerticalStackLayout>
+            
+            <Button Grid.Column="1" 
+                    Text="👨‍🏫 Profesores" 
+                    Command="{Binding NavegarAProfesoresCommand}" 
+                    BackgroundColor="#2563EB"
+                    TextColor="White"
+                    FontSize="12"
+                    CornerRadius="8"
+                    HeightRequest="38"
+                    VerticalOptions="Center"
+                    Padding="10,0"/>
+        </Grid>
 
         <!-- Catálogo de Cursos con Scroll Infinito -->
         <CollectionView Grid.Row="1"

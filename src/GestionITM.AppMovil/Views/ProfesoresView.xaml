@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:GestionITM.AppMovil.ViewModels"
+             x:Class="GestionITM.AppMovil.Views.ProfesoresView"
+             x:DataType="vm:ProfesoresViewModel"
+             Title="👨‍🏫 Ecosistema ITM - Profesores">
+
+    <!-- Regla de Oro 1: La Vista es solo una marioneta visual tonta sin lógica interna -->
+    <Grid RowDefinitions="Auto, *">
+        
+        <!-- Cabecera Slate Premium -->
+        <VerticalStackLayout Grid.Row="0" Padding="15" BackgroundColor="#1E293B">
+            <!-- Enlazamos el título dinámicamente desde el Titiritero (ViewModel) -->
+            <Label Text="{Binding TituloPantalla}" TextColor="White" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center"/>
+            <Label Text="Desliza hacia abajo para actualizar la lista en tiempo real" TextColor="#94A3B8" FontSize="12" HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+
+        <!-- Enlace al Comando y Propiedad de Carga (RefreshView) autogenerados de MVVM Toolkit -->
+        <RefreshView Grid.Row="1" 
+                     IsRefreshing="{Binding EstaCargando}" 
+                     Command="{Binding CargarProfesoresCommand}">
+            
+            <CollectionView ItemsSource="{Binding ListaProfesores}" Padding="10">
+                
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Padding="30">
+                        <Label Text="No se encontraron profesores registrados en el ITM." FontSize="16" HorizontalTextAlignment="Center" TextColor="Gray"/>
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="0,0,0,10" Padding="15" CornerRadius="12" BorderColor="#E2E8F0" HasShadow="True">
+                            <Grid ColumnDefinitions="Auto, *">
+                                
+                                <!-- Icono visual elegante estilo avatar -->
+                                <Border Grid.Column="0" 
+                                        WidthRequest="45" 
+                                        HeightRequest="45" 
+                                        StrokeShape="RoundRectangle 22.5" 
+                                        Stroke="Transparent" 
+                                        BackgroundColor="#DBEAFE" 
+                                        Margin="0,0,15,0">
+                                    <Label Text="👨‍🏫" HorizontalOptions="Center" VerticalOptions="Center" FontSize="20"/>
+                                </Border>
+
+                                <!-- Información del Profesor -->
+                                <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                    <Label Text="{Binding Nombre}" FontSize="18" FontAttributes="Bold" TextColor="#1E293B" />
+                                    
+                                    <HorizontalStackLayout Spacing="5">
+                                        <Label Text="Especialidad:" TextColor="#64748B" FontSize="13" FontAttributes="Bold" />
+                                        <Label Text="{Binding Especialidad}" TextColor="#2563EB" FontSize="13" />
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+</ContentPage>

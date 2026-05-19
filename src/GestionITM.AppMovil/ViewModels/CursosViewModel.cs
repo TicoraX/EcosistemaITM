@@ -2,12 +2,14 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using GestionITM.AppMovil.Models;
 using GestionITM.AppMovil.Services;
+using GestionITM.AppMovil.Views;
 
 namespace GestionITM.AppMovil.ViewModels;
 
 public class CursosViewModel : BindableObject
 {
     private readonly ApiService _apiService;
+    private readonly ProfesoresView _profesoresView;
     private int _currentPage = 1;
     private bool _isLoading;
 
@@ -15,12 +17,15 @@ public class CursosViewModel : BindableObject
     
     public ICommand CargarMasCursosCommand { get; }
     public ICommand MatricularCommand { get; }
+    public ICommand NavegarAProfesoresCommand { get; }
 
-    public CursosViewModel(ApiService apiService)
+    public CursosViewModel(ApiService apiService, ProfesoresView profesoresView)
     {
         _apiService = apiService;
+        _profesoresView = profesoresView;
         CargarMasCursosCommand = new Command(async () => await CargarCursosAsync());
         MatricularCommand = new Command<CursoDto>(async (c) => await MatricularseAsync(c));
+        NavegarAProfesoresCommand = new Command(async () => await Application.Current!.MainPage!.Navigation.PushAsync(_profesoresView));
         
         // Carga Inicial
         _ = CargarCursosAsync();
