@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:GestionITM.AppMovil.ViewModels"
+             xmlns:models="clr-namespace:GestionITM.AppMovil.Models"
              x:Class="GestionITM.AppMovil.Views.ProfesoresView"
              x:DataType="vm:ProfesoresViewModel"
              Title="👨‍🏫 Ecosistema ITM - Profesores">
@@ -21,7 +22,7 @@
                      IsRefreshing="{Binding EstaCargando}" 
                      Command="{Binding CargarProfesoresCommand}">
             
-            <CollectionView ItemsSource="{Binding ListaProfesores}" Padding="10">
+            <CollectionView ItemsSource="{Binding ListaProfesores}" Margin="10">
                 
                 <CollectionView.EmptyView>
                     <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Padding="30">
@@ -30,7 +31,7 @@
                 </CollectionView.EmptyView>
 
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="models:ProfesorModel">
                         <Frame Margin="0,0,0,10" Padding="15" CornerRadius="12" BorderColor="#E2E8F0" HasShadow="True">
                             <Grid ColumnDefinitions="Auto, *">
                                 
