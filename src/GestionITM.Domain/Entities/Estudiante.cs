@@ -21,7 +21,9 @@ namespace GestionITM.Domain.Entities
         // Práctica Migración EFCore
         [MaxLength(20)]
         public string Telefono { get; set; } = string.Empty;
-     
 
+        [Required]
+        [MaxLength(256)]
+        public string PasswordHash { get; set; } = string.Empty;
     }
 }

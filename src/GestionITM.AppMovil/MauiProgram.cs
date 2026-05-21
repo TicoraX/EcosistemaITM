@@ -1,6 +1,7 @@
 using GestionITM.AppMovil.Services;
 using GestionITM.AppMovil.ViewModels;
 using GestionITM.AppMovil.Views;
+using Microsoft.Extensions.Logging;
 
 namespace GestionITM.AppMovil;
 
@@ -23,8 +24,8 @@ public static class MauiProgram
         // Registrar el ApiService configurado con el AuthHandler para inyectar JWT automáticamente
         builder.Services.AddHttpClient<ApiService>(client =>
         {
-            // Cambia esto a la IP local de tu computador cuando pruebes en Android, por ejemplo: http://192.168.1.15:8080/
-            client.BaseAddress = new Uri("http://localhost:8080/"); 
+            // Emulador Android: 10.0.2.2 apunta al localhost del host. Dispositivo físico: IP LAN del PC.
+            client.BaseAddress = new Uri("http://10.0.2.2:8080/");
         }).AddHttpMessageHandler<AuthHandler>();
 
         // Registrar Vistas y ViewModels (Inyección de Dependencias)

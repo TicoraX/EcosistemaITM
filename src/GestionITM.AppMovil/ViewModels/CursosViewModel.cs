@@ -65,8 +65,14 @@ public class CursosViewModel : BindableObject
 
         try
         {
-            // Para la demostración se simula que el estudiante matriculado es el ID 1
-            await _apiService.MatricularAsync(1, curso.Id);
+            var estudianteId = await ApiService.GetEstudianteIdAsync();
+            if (estudianteId <= 0)
+            {
+                await Shell.Current.DisplayAlert("Atención", "Debes iniciar sesión nuevamente.", "OK");
+                return;
+            }
+
+            await _apiService.MatricularAsync(estudianteId, curso.Id);
             
             // Disminuir cupo visualmente para feedback inmediato
             if (curso.CuposDisponibles > 0)
@@ -77,10 +83,13 @@ public class CursosViewModel : BindableObject
 
             await Application.Current!.MainPage!.DisplayAlert("Matrícula Exitosa 🎉", $"Te has matriculado en el curso: {curso.Nombre}", "Excelente");
         }
+        catch (MatriculaApiException ex)
+        {
+            await Shell.Current.DisplayAlert("Ups...", ex.Message, "OK");
+        }
         catch (Exception ex)
         {
-            // FASE B: UX Resiliente. En caso de error 400 (ej: Falta de cupo), mostramos DisplayAlert sin cerrar la App.
-            await Application.Current!.MainPage!.DisplayAlert("Fallo en la Matrícula ❌", ex.Message, "Entendido");
+            await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
         }
     }
 }

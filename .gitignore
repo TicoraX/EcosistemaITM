@@ -37,8 +37,10 @@ appsettings.Local.json
 
 ## Logs
 logs/
+Logs/
 *.log
 src/GestionITM.API/Logs/
+**/Logs/
 
 ## MAUI / Xamarin
 [Bb]in/

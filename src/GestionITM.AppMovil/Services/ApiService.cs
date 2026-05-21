@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Text.Json;
 using GestionITM.AppMovil.Models;
 
 namespace GestionITM.AppMovil.Services;
@@ -14,14 +15,16 @@ public class ApiService
 
     public async Task<string> LoginAsync(string email, string password)
     {
-        var response = await _httpClient.PostAsJsonAsync("api/auth/login", new { email, password });
+        var response = await _httpClient.PostAsJsonAsync("api/auth/login", new { Email = email, Password = password });
         if (response.IsSuccessStatusCode)
         {
             var result = await response.Content.ReadFromJsonAsync<TokenResponse>();
             if (result != null && !string.IsNullOrEmpty(result.Token))
             {
                 // Guardar token en almacenamiento seguro nativo
-                await SecureStorage.SetAsync("jwt_token", result.Token);
+                await SecureStorage.SetAsync("auth_token", result.Token);
+                if (result.EstudianteId > 0)
+                    await SecureStorage.SetAsync("estudiante_id", result.EstudianteId.ToString());
                 return result.Token;
             }
         }
@@ -50,16 +53,40 @@ public class ApiService
 
         if (!response.IsSuccessStatusCode)
         {
-            try
-            {
-                // Leer el error devuelto por la regla de negocio del backend
-                var error = await response.Content.ReadFromJsonAsync<ErrorResponse>();
-                throw new Exception(error?.Message ?? "No fue posible realizar la matrícula.");
-            }
-            catch (JsonException)
-            {
-                throw new Exception("Error inesperado en el servidor al matricularse.");
+            var errorMessage = await TryReadErrorMessageAsync(response);
+            throw new MatriculaApiException(errorMessage);
         }
+    }
+
+    public static async Task<int> GetEstudianteIdAsync()
+    {
+        var id = await SecureStorage.GetAsync("estudiante_id");
+        return int.TryParse(id, out var parsed) ? parsed : 0;
+    }
+
+    private static async Task<string> TryReadErrorMessageAsync(HttpResponseMessage response)
+    {
+        try
+        {
+            var body = await response.Content.ReadAsStringAsync();
+            if (string.IsNullOrWhiteSpace(body))
+                return "No fue posible realizar la matrícula.";
+
+            var error = JsonSerializer.Deserialize<ErrorResponse>(body,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            if (!string.IsNullOrWhiteSpace(error?.Message))
+                return error.Message;
+
+            using var doc = JsonDocument.Parse(body);
+            if (doc.RootElement.TryGetProperty("message", out var msg))
+                return msg.GetString() ?? "No fue posible realizar la matrícula.";
+        }
+        catch
+        {
+            // ignored
+        }
+
+        return "No fue posible realizar la matrícula.";
     }
 
     public async Task<List<ProfesorModel>> GetProfesoresAsync()
@@ -74,12 +101,18 @@ public class ApiService
     }
 }
 
-public class TokenResponse 
-{ 
-    public string Token { get; set; } = string.Empty; 
+public class TokenResponse
+{
+    public string Token { get; set; } = string.Empty;
+    public int EstudianteId { get; set; }
 }
 
-public class ErrorResponse 
-{ 
-    public string Message { get; set; } = string.Empty; 
+public class ErrorResponse
+{
+    public string Message { get; set; } = string.Empty;
+}
+
+public class MatriculaApiException : Exception
+{
+    public MatriculaApiException(string message) : base(message) { }
 }

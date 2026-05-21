@@ -3,6 +3,7 @@ using GestionITM.API.Mappings;
 using GestionITM.Domain.Interfaces;
 using GestionITM.Infrastructure;
 using GestionITM.API.Middleware;
+using GestionITM.Infrastructure.Data;
 using GestionITM.Infrastructure.Repositories;
 using GestionITM.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
@@ -53,11 +54,27 @@ builder.Services.AddSwaggerGen(c =>
     c.IncludeXmlComments(xmlPath);
 });
 
-// 1. Configurar la cadena de conexión
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
+}
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException(
+        "Configure ConnectionStrings__DefaultConnection (variable de entorno o User Secrets).");
+}
 
-// Configuración de JWT Authentication
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(connectionString));
+
+var jwtKey = builder.Configuration["Jwt:Key"]
+    ?? Environment.GetEnvironmentVariable("JWT_KEY");
+if (string.IsNullOrWhiteSpace(jwtKey))
+{
+    throw new InvalidOperationException("Configure Jwt:Key o la variable de entorno JWT_KEY.");
+}
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -69,20 +86,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
-            // Nota docente: este warning (CS8604) aparece porque builder.Configuration["Jwt:Key"]
-            // podría ser null y Encoding.UTF8.GetBytes no acepta null.
-            // Una forma correcta de resolverlo sería:
-            //
-            // var jwtKey = builder.Configuration["Jwt:Key"];
-            // if (string.IsNullOrWhiteSpace(jwtKey))
-            // {
-            //     throw new InvalidOperationException("Jwt:Key no está configurado en appsettings.json o en las variables de entorno.");
-            // }
-            // IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
-            //
-            // Es mejor que usar el operador ! (null-forgiving), porque así el sistema falla
-            // de forma clara al arrancar cuando falta la configuración.
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
         };
     });
 
@@ -98,6 +102,7 @@ builder.Services.AddScoped<IProfesorService, ProfesorService>();
 
 builder.Services.AddScoped<IMatriculaRepository, MatriculaRepository>();
 builder.Services.AddScoped<IMatriculaService, MatriculaService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(MappingProfile));
@@ -105,13 +110,14 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 var app = builder.Build();
 
 // Nivel Dios: Aplicar migraciones pendientes automáticamente al arrancar
-using (var scope = app.Services.CreateScope())
+await using (var scope = app.Services.CreateAsyncScope())
 {
     var services = scope.ServiceProvider;
     try
     {
         var context = services.GetRequiredService<ApplicationDbContext>();
-        context.Database.Migrate();
+        await context.Database.MigrateAsync();
+        await DbSeeder.SeedAsync(context);
     }
     catch (Exception ex)
     {

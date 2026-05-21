@@ -32,16 +32,8 @@ namespace GestionITM.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            try
-            {
-                var matricula = await _matriculaService.CreateAsync(matriculaDto);
-                return Ok(matricula);
-            }
-            catch (Exception ex)
-            {
-                // Devolver bad request con el mensaje del negocio
-                return BadRequest(new { Message = ex.Message });
-            }
+            var matricula = await _matriculaService.CreateAsync(matriculaDto);
+            return Ok(matricula);
         }
     }
 }

@@ -1,40 +1,40 @@
-services: 
+services:
 
-  # ----------------------------------------------------
-  # CAMIÓN 1: La Base de Datos (SQL Server para Linux)
-  # ----------------------------------------------------
   db-sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: itm-database
     environment:
       - ACCEPT_EULA=Y
-      # La contraseña se inyecta desde la variable DB_PASSWORD declarada en el archivo .env
       - MSSQL_SA_PASSWORD=${DB_PASSWORD}
     ports:
-      - "1433:1433" # Mapeamos el puerto de SQL Server
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
     networks:
       - itm-network
 
-  # ----------------------------------------------------
-  # CAMIÓN 2: Nuestra API de Matrículas y Cursos
-  # ----------------------------------------------------
   api-gestion:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
     container_name: itm-api
     depends_on:
-      - db-sqlserver # La API no arranca si la BD no está lista
+      - db-sqlserver
     ports:
       - "8080:8080"
     environment:
       - ASPNETCORE_ENVIRONMENT=Docker
-      # La contraseña de la cadena de conexión se lee de forma dinámica desde el entorno
-      - 'ConnectionStrings__DefaultConnection=Server=db-sqlserver;Database=GestionITM;User Id=sa;Password=${DB_PASSWORD};TrustServerCertificate=True;'
+      - ASPNETCORE_URLS=http://+:8080
+      - ConnectionStrings__DefaultConnection=Server=db-sqlserver;Database=GestionITM;User Id=sa;Password=${DB_PASSWORD};TrustServerCertificate=True;
+      - JWT_KEY=${JWT_KEY}
+      - Jwt__Issuer=GestionITMAPI
+      - Jwt__Audience=EstudiantesITM
     networks:
       - itm-network
 
-# Red interna privada para que los contenedores se comuniquen
 networks:
   itm-network:
     driver: bridge
+
+volumes:
+  sqlserver_data:

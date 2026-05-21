@@ -13,5 +13,6 @@ namespace GestionITM.Domain.Interfaces
         Task<IEnumerable<Estudiante>> ObtenerTodoAsync(); // Obtener todos los estudiantes
         Task<Estudiante?> ObtenerPorIdAsync(int id); // Obtener un estudiante por su ID
         Task AgregarAsync(Estudiante estudiante); // Agregar un nuevo estudiante
+        Task<Estudiante?> ObtenerPorCorreoAsync(string correo);
     }
 }

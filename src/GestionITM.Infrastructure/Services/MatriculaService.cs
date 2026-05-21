@@ -1,10 +1,8 @@
 using AutoMapper;
 using GestionITM.Domain.Dtos;
 using GestionITM.Domain.Entities;
+using GestionITM.Domain.Exceptions;
 using GestionITM.Domain.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace GestionITM.Infrastructure.Services
 {
@@ -40,14 +38,10 @@ namespace GestionITM.Infrastructure.Services
             // Regla de Negocio (El Chef)
             var curso = await _cursoRepository.ObtenerPorIdAsync(matriculaDto.CursoId);
             if (curso == null)
-            {
-                throw new Exception("El curso especificado no existe.");
-            }
+                throw new CursoNotFoundException(matriculaDto.CursoId);
 
             if (curso.CuposDisponibles <= 0)
-            {
-                throw new Exception("El curso ya no tiene cupos disponibles.");
-            }
+                throw new NoAvailableSeatsException();
 
             // Disminuir cupos disponibles
             curso.CuposDisponibles--;

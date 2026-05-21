@@ -7,7 +7,7 @@ public class AuthHandler : DelegatingHandler
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
         // Recuperar el token JWT de SecureStorage de forma segura y multiplataforma
-        var token = await SecureStorage.GetAsync("jwt_token");
+        var token = await SecureStorage.GetAsync("auth_token");
         
         if (!string.IsNullOrEmpty(token))
         {

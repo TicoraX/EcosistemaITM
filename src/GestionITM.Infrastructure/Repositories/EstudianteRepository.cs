@@ -31,9 +31,14 @@ namespace GestionITM.Infrastructure.Repositories
         }
         public async Task AgregarAsync(Estudiante estudiante)
         {
-            // Agregamos el nuevo estudiante al DbSet y guardamos los cambios en la base de datos
             await _context.Estudiantes.AddAsync(estudiante);
-            await _context.SaveChangesAsync(); // Persiste los cambios en SQL
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<Estudiante?> ObtenerPorCorreoAsync(string correo)
+        {
+            return await _context.Estudiantes
+                .FirstOrDefaultAsync(e => e.Correo == correo);
         }
     }
 }

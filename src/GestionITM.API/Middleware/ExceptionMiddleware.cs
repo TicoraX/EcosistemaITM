@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Logging;
+﻿using GestionITM.Domain.Exceptions;
+using GestionITM.Domain.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using System.Net;
 using System.Text.Json;
-using GestionITM.Domain.Models;
 
 namespace GestionITM.API.Middleware
 {
@@ -33,7 +35,11 @@ namespace GestionITM.API.Middleware
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, ex.Message); // Guardar el error en el log
+                _logger.LogError(ex, ex.Message);
+                if (ex is NoAvailableSeatsException or CursoNotFoundException)
+                    Log.Warning(ex, "Regla de negocio: {Message}", ex.Message);
+                else
+                    Log.Error(ex, "Error no controlado: {Message}", ex.Message);
                 await HandleExceptionAsync(context, ex);
             }
         }
@@ -55,6 +61,8 @@ namespace GestionITM.API.Middleware
             // Determinar el código de estado según el tipo de excepción
             var statusCode = ex switch
             {
+                NoAvailableSeatsException => (int)HttpStatusCode.BadRequest,
+                CursoNotFoundException => (int)HttpStatusCode.BadRequest,
                 KeyNotFoundException => (int)HttpStatusCode.NotFound,
                 ArgumentException => (int)HttpStatusCode.BadRequest,
                 _ => (int)HttpStatusCode.InternalServerError
@@ -64,11 +72,15 @@ namespace GestionITM.API.Middleware
             var response = new ErrorResponse
             {
                 StatusCode = statusCode,
-                Message = statusCode switch
+                Message = ex switch
                 {
-                    (int)HttpStatusCode.NotFound => "El recurso solicitado no fue encontrado en el sistema del ITM.",
-                    (int)HttpStatusCode.BadRequest => "La petición enviada no es válida. Verifique los datos.",
-                    _ => "Ocurrió un error interno en el servidor del ITM."
+                    NoAvailableSeatsException noSeats => noSeats.Message,
+                    CursoNotFoundException curso => curso.Message,
+                    KeyNotFoundException => "El recurso solicitado no fue encontrado en el sistema del ITM.",
+                    ArgumentException arg => arg.Message,
+                    _ => statusCode == (int)HttpStatusCode.InternalServerError
+                        ? "Ocurrió un error interno en el servidor del ITM."
+                        : "La petición enviada no es válida. Verifique los datos."
                 },
                 // Si estamos en desarrollo, mostramos el error real. En producción, no.
                 Details = _env.IsDevelopment() ? ex.StackTrace?.ToString() : null
