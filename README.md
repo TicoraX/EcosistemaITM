@@ -78,14 +78,43 @@ Para detener los servicios:
 docker-compose down
 ```
 
-### Opción B: Ejecución nativa en Visual Studio
+### Opción B: Ejecución nativa (API + interfaz móvil)
 
-1. Abra el archivo de solución unificada `EcosistemaITM.slnx` en Visual Studio.
-2. Si ejecuta el proyecto localmente y necesita aplicar las migraciones a su propia base de datos:
-   ```bash
-   dotnet ef database update --project src/GestionITM.Infrastructure --startup-project src/GestionITM.API
-   ```
-3. Inicie el proyecto `GestionITM.API` como proyecto de arranque y ejecute la aplicación móvil `GestionITM.AppMovil` desde el emulador o dispositivo físico de su preferencia.
+La **API en terminal** solo muestra Swagger (`http://localhost:5016/swagger`). La **interfaz móvil** es el proyecto `GestionITM.AppMovil` y se ejecuta aparte (emulador Android o Visual Studio).
+
+#### 1) Levantar la API (terminal en la raíz del repo)
+
+```powershell
+$env:JWT_KEY='ClaveJwtMinimo32CaracteresParaHMAC256!!'
+dotnet run --project src\GestionITM.API
+```
+
+#### 2) Ejecutar la app móvil (Visual Studio 2022)
+
+1. Abra `EcosistemaITM.slnx`.
+2. Instale la carga de trabajo **.NET MAUI** y **Desarrollo para Android**.
+3. Clic derecho en `GestionITM.AppMovil` → **Establecer como proyecto de inicio**.
+4. En la barra superior elija un **emulador Android** (no "Windows Machine").
+5. Pulse **F5** (o el botón ▶ verde).
+
+Verá la pantalla de **Iniciar Sesión** (no Swagger). Credenciales demo:
+
+- Email: `estudiante.demo@correo.itm.edu.co`
+- Contraseña: `ItmDemo2026!`
+
+#### 3) URL de la API en el emulador
+
+En `MauiProgram.cs`, método `GetApiBaseUrl()`: use puerto **5016** si la API corre con `dotnet run`, o **8080** si usa Docker. El emulador usa `http://10.0.2.2:{puerto}/`.
+
+#### Migraciones (si la base está vacía)
+
+```powershell
+dotnet ef database update --project src\GestionITM.Infrastructure --startup-project src\GestionITM.API
+```
+
+### GitHub Actions (CI)
+
+El pipeline está en [`.github/workflows/ci.yml`](.github/workflows/ci.yml). Se ejecuta al hacer `git push` a GitHub (ramas `main`, `master` o `develop`). Revise la pestaña **Actions** del repositorio en GitHub.
 
 ---
 

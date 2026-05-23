@@ -24,8 +24,9 @@ public static class MauiProgram
         // Registrar el ApiService configurado con el AuthHandler para inyectar JWT automáticamente
         builder.Services.AddHttpClient<ApiService>(client =>
         {
-            // Emulador Android: 10.0.2.2 apunta al localhost del host. Dispositivo físico: IP LAN del PC.
-            client.BaseAddress = new Uri("http://10.0.2.2:8080/");
+            // Emulador Android: 10.0.2.2 = localhost del PC.
+            // dotnet run (API local) → puerto 5016 | Docker → puerto 8080 | Dispositivo físico → IP LAN del PC.
+            client.BaseAddress = new Uri(GetApiBaseUrl());
         }).AddHttpMessageHandler<AuthHandler>();
 
         // Registrar Vistas y ViewModels (Inyección de Dependencias)
@@ -41,5 +42,12 @@ public static class MauiProgram
 #endif
 
         return builder.Build();
+    }
+
+    private static string GetApiBaseUrl()
+    {
+        // Cambie el puerto según cómo ejecute la API: 5016 (dotnet run) o 8080 (docker compose).
+        const string apiPort = "5016";
+        return $"http://10.0.2.2:{apiPort}/";
     }
 }
