@@ -33,12 +33,14 @@ namespace GestionITM.Infrastructure.Services
             //Reglas de negocio para validar el estudiante Nivel 5
             // No permitimos correos que no sean del dominio @itm.edu.co
             if (!estudianteDto.Correo.EndsWith("@correo.itm.edu.co"))
-            {
-                return false; // No se permite registrar el estudiante
-            }
+                return false;
+
+            if (string.IsNullOrWhiteSpace(estudianteDto.Password) || estudianteDto.Password.Length < 6)
+                return false;
 
             var estudiante = _mapper.Map<Estudiante>(estudianteDto);
-            estudiante.FechaInscripcion = DateTime.UtcNow; // Asignamos la fecha de inscripción actual
+            estudiante.FechaInscripcion = DateTime.UtcNow;
+            estudiante.PasswordHash = BCrypt.Net.BCrypt.HashPassword(estudianteDto.Password);
 
             await _repository.AgregarAsync(estudiante);
             return true; // Estudiante registrado exitosamente

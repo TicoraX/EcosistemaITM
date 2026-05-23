@@ -9,7 +9,8 @@ namespace GestionITM.Domain.Dtos
     public class EstudianteCreateDto
     {
         // Este es el que suaremos para recibir los Datos
-        public string Nombre{ get; set; } = string.Empty;
+        public string Nombre { get; set; } = string.Empty;
         public string Correo { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
     }
 }

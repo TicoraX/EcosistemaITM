@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace GestionITM.API.Controllers
 {
-    [Authorize] // El Candado: Nadie entra a este controlador sin un token válido
     [Route("api/[controller]")]
     [ApiController]
     public class EstudianteController : ControllerBase
@@ -20,6 +19,7 @@ namespace GestionITM.API.Controllers
         }
 
         // GET: api/estudiante
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EstudianteDto>>> Get()
         {
@@ -29,6 +29,7 @@ namespace GestionITM.API.Controllers
         }
 
         // GET: api/estudiante/5
+        [Authorize]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<EstudianteDto>> Get(int id)
         {
@@ -44,7 +45,8 @@ namespace GestionITM.API.Controllers
             return Ok(estudianteDto);
         }
 
-        // POST: api/estudiante
+        // POST: api/estudiante — registro público (sin token)
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] EstudianteCreateDto estudianteCreateDto)
         {
