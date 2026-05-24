@@ -6,13 +6,27 @@
 
     <Grid RowDefinitions="Auto, *">
         <!-- Encabezado Estético con Acceso al Directorio de Profesores -->
-        <Grid Grid.Row="0" ColumnDefinitions="*, Auto" Padding="15" BackgroundColor="#1E293B">
+        <Grid Grid.Row="0" ColumnDefinitions="*, Auto, Auto" Padding="15" BackgroundColor="#1E293B">
             <VerticalStackLayout Grid.Column="0" Spacing="2" VerticalOptions="Center">
                 <Label Text="Cursos Disponibles" TextColor="White" FontSize="20" FontAttributes="Bold"/>
                 <Label Text="Desliza para cargar más cursos en tiempo real" TextColor="#94A3B8" FontSize="12"/>
             </VerticalStackLayout>
             
             <Button Grid.Column="1" 
+                    Text="API" 
+                    Command="{Binding NavegarAApiExplorerCommand}" 
+                    BackgroundColor="Transparent"
+                    TextColor="#7DD3FC"
+                    BorderColor="#7DD3FC"
+                    BorderWidth="1"
+                    FontSize="12"
+                    CornerRadius="8"
+                    HeightRequest="38"
+                    VerticalOptions="Center"
+                    Padding="10,0"
+                    Margin="0,0,8,0"/>
+
+            <Button Grid.Column="2" 
                     Text="👨‍🏫 Profesores" 
                     Command="{Binding NavegarAProfesoresCommand}" 
                     BackgroundColor="#2563EB"

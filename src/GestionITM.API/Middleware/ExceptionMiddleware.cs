@@ -38,6 +38,8 @@ namespace GestionITM.API.Middleware
                 _logger.LogError(ex, ex.Message);
                 if (ex is NoAvailableSeatsException or CursoNotFoundException)
                     Log.Warning(ex, "Regla de negocio: {Message}", ex.Message);
+                else if (ex is DuplicateMatriculaException)
+                    Log.Warning(ex, "Regla de negocio: {Message}", ex.Message);
                 else
                     Log.Error(ex, "Error no controlado: {Message}", ex.Message);
                 await HandleExceptionAsync(context, ex);
@@ -63,6 +65,7 @@ namespace GestionITM.API.Middleware
             {
                 NoAvailableSeatsException => (int)HttpStatusCode.BadRequest,
                 CursoNotFoundException => (int)HttpStatusCode.BadRequest,
+                DuplicateMatriculaException => (int)HttpStatusCode.Conflict,
                 KeyNotFoundException => (int)HttpStatusCode.NotFound,
                 ArgumentException => (int)HttpStatusCode.BadRequest,
                 _ => (int)HttpStatusCode.InternalServerError
@@ -76,6 +79,7 @@ namespace GestionITM.API.Middleware
                 {
                     NoAvailableSeatsException noSeats => noSeats.Message,
                     CursoNotFoundException curso => curso.Message,
+                    DuplicateMatriculaException duplicate => duplicate.Message,
                     KeyNotFoundException => "El recurso solicitado no fue encontrado en el sistema del ITM.",
                     ArgumentException arg => arg.Message,
                     _ => statusCode == (int)HttpStatusCode.InternalServerError

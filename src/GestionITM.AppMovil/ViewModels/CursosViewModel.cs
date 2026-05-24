@@ -9,6 +9,7 @@ namespace GestionITM.AppMovil.ViewModels;
 public class CursosViewModel : BindableObject
 {
     private readonly ApiService _apiService;
+    private readonly ApiExplorerView _apiExplorerView;
     private readonly ProfesoresView _profesoresView;
     private int _currentPage = 1;
     private bool _isLoading;
@@ -18,14 +19,17 @@ public class CursosViewModel : BindableObject
     public ICommand CargarMasCursosCommand { get; }
     public ICommand MatricularCommand { get; }
     public ICommand NavegarAProfesoresCommand { get; }
+    public ICommand NavegarAApiExplorerCommand { get; }
 
-    public CursosViewModel(ApiService apiService, ProfesoresView profesoresView)
+    public CursosViewModel(ApiService apiService, ApiExplorerView apiExplorerView, ProfesoresView profesoresView)
     {
         _apiService = apiService;
+        _apiExplorerView = apiExplorerView;
         _profesoresView = profesoresView;
         CargarMasCursosCommand = new Command(async () => await CargarCursosAsync());
         MatricularCommand = new Command<CursoDto>(async (c) => await MatricularseAsync(c));
         NavegarAProfesoresCommand = new Command(async () => await Application.Current!.MainPage!.Navigation.PushAsync(_profesoresView));
+        NavegarAApiExplorerCommand = new Command(async () => await Application.Current!.MainPage!.Navigation.PushAsync(_apiExplorerView));
         
         // Carga Inicial
         _ = CargarCursosAsync();
@@ -68,7 +72,7 @@ public class CursosViewModel : BindableObject
             var estudianteId = await ApiService.GetEstudianteIdAsync();
             if (estudianteId <= 0)
             {
-                await Shell.Current.DisplayAlert("Atención", "Debes iniciar sesión nuevamente.", "OK");
+                await Application.Current!.MainPage!.DisplayAlert("Atención", "Debes iniciar sesión nuevamente.", "OK");
                 return;
             }
 
@@ -85,11 +89,11 @@ public class CursosViewModel : BindableObject
         }
         catch (MatriculaApiException ex)
         {
-            await Shell.Current.DisplayAlert("Ups...", ex.Message, "OK");
+            await Application.Current!.MainPage!.DisplayAlert("No fue posible matricular", ex.Message, "OK");
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Error", ex.Message, "OK");
+            await Application.Current!.MainPage!.DisplayAlert("Error", ex.Message, "OK");
         }
     }
 }

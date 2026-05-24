@@ -7,6 +7,7 @@ namespace GestionITM.AppMovil.ViewModels;
 public class LoginViewModel : BindableObject
 {
     private readonly ApiService _apiService;
+    private readonly ApiExplorerView _apiExplorerView;
     private readonly CursosView _cursosView;
     private string _email = string.Empty;
     private string _password = string.Empty;
@@ -31,12 +32,15 @@ public class LoginViewModel : BindableObject
     }
 
     public ICommand LoginCommand { get; }
+    public ICommand VerApiCommand { get; }
 
-    public LoginViewModel(ApiService apiService, CursosView cursosView)
+    public LoginViewModel(ApiService apiService, ApiExplorerView apiExplorerView, CursosView cursosView)
     {
         _apiService = apiService;
+        _apiExplorerView = apiExplorerView;
         _cursosView = cursosView;
         LoginCommand = new Command(async () => await IniciarSesionAsync(), () => !IsBusy);
+        VerApiCommand = new Command(async () => await Application.Current!.MainPage!.Navigation.PushAsync(_apiExplorerView));
     }
 
     private async Task IniciarSesionAsync()
