@@ -111,7 +111,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"estudianteId\": 1,\n    \"cursoId\": 2,\n    \"periodo\": \"2026-1\"\n}",
+							"raw": "{\n    \"cursoId\": 2,\n    \"periodo\": \"2026-1\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -149,7 +149,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"estudianteId\": 1,\n    \"cursoId\": 99,\n    \"periodo\": \"2026-1\"\n}",
+							"raw": "{\n    \"cursoId\": 99,\n    \"periodo\": \"2026-1\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"

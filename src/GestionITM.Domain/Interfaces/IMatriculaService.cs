@@ -8,6 +8,6 @@ namespace GestionITM.Domain.Interfaces
     {
         Task<IEnumerable<MatriculaDto>> GetAllAsync();
         Task<MatriculaDto?> GetByIdAsync(int id);
-        Task<MatriculaDto> CreateAsync(MatriculaCreateDto matriculaDto);
+        Task<MatriculaDto> CreateAsync(int estudianteId, MatriculaCreateDto matriculaDto);
     }
 }

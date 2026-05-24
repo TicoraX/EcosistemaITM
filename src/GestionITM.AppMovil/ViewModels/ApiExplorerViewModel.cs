@@ -54,7 +54,7 @@ public class ApiExplorerViewModel
             Title = "Crear matrícula",
             Description = "Inscribe al estudiante autenticado en un curso disponible.",
             AccessLabel = "JWT",
-            ExampleBody = "{\n  \"estudianteId\": 1,\n  \"cursoId\": 4,\n  \"periodo\": \"2026-1\"\n}"
+            ExampleBody = "{\n  \"cursoId\": 4,\n  \"periodo\": \"2026-1\"\n}"
         },
         new ApiEndpointCard
         {

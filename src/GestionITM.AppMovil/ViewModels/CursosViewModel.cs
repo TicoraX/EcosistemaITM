@@ -76,7 +76,7 @@ public class CursosViewModel : BindableObject
                 return;
             }
 
-            await _apiService.MatricularAsync(estudianteId, curso.Id);
+            await _apiService.MatricularAsync(curso.Id);
             
             // Disminuir cupo visualmente para feedback inmediato
             if (curso.CuposDisponibles > 0)

@@ -42,11 +42,10 @@ public class ApiService
         throw new Exception("No se pudo cargar el catálogo de cursos.");
     }
 
-    public async Task MatricularAsync(int estudianteId, int cursoId)
+    public async Task MatricularAsync(int cursoId)
     {
         var response = await _httpClient.PostAsJsonAsync("api/matricula", new 
         { 
-            EstudianteId = estudianteId, 
             CursoId = cursoId, 
             Periodo = "2026-1" 
         });

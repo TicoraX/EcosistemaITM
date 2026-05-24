@@ -2,6 +2,7 @@ using GestionITM.Domain.Dtos;
 using GestionITM.Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace GestionITM.API.Controllers
 {
@@ -32,7 +33,13 @@ namespace GestionITM.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var matricula = await _matriculaService.CreateAsync(matriculaDto);
+            var estudianteIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(estudianteIdClaim, out var estudianteId))
+            {
+                return Unauthorized(new { message = "No se pudo identificar el estudiante autenticado." });
+            }
+
+            var matricula = await _matriculaService.CreateAsync(estudianteId, matriculaDto);
             return Ok(matricula);
         }
     }

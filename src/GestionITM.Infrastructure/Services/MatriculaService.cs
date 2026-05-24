@@ -33,16 +33,16 @@ namespace GestionITM.Infrastructure.Services
             return _mapper.Map<MatriculaDto>(matricula);
         }
 
-        public async Task<MatriculaDto> CreateAsync(MatriculaCreateDto matriculaDto)
+        public async Task<MatriculaDto> CreateAsync(int estudianteId, MatriculaCreateDto matriculaDto)
         {
             // Regla de Negocio (El Chef)
             var curso = await _cursoRepository.ObtenerPorIdAsync(matriculaDto.CursoId);
             if (curso == null)
                 throw new CursoNotFoundException(matriculaDto.CursoId);
 
-            var yaMatriculado = await _matriculaRepository.ExistsAsync(matriculaDto.EstudianteId, matriculaDto.CursoId);
+            var yaMatriculado = await _matriculaRepository.ExistsAsync(estudianteId, matriculaDto.CursoId);
             if (yaMatriculado)
-                throw new DuplicateMatriculaException(matriculaDto.EstudianteId, matriculaDto.CursoId);
+                throw new DuplicateMatriculaException(estudianteId, matriculaDto.CursoId);
 
             if (curso.CuposDisponibles <= 0)
                 throw new NoAvailableSeatsException();
@@ -53,6 +53,7 @@ namespace GestionITM.Infrastructure.Services
 
             // Crear matrícula
             var matricula = _mapper.Map<Matricula>(matriculaDto);
+            matricula.EstudianteId = estudianteId;
             matricula.Estado = "Activa";
 
             var nuevaMatricula = await _matriculaRepository.AddAsync(matricula);
