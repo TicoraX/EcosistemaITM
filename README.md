@@ -134,4 +134,3 @@ La colección contiene los siguientes flujos preparados:
 ## Documentación de Apoyo
 
 - La carpeta [postman/](postman/) contiene la colección JSON para importar en Postman y replicar las pruebas.
-- El archivo [INSTALAR_APP_MOVIL.md](INSTALAR_APP_MOVIL.md) explica cómo ejecutar la app MAUI en el emulador Android.
