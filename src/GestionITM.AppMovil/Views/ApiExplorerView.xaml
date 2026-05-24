@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:GestionITM.AppMovil.ViewModels"
+             xmlns:models="clr-namespace:GestionITM.AppMovil.Models"
+             x:Class="GestionITM.AppMovil.Views.ApiExplorerView"
+             x:DataType="viewModels:ApiExplorerViewModel"
+             Title="Swagger móvil"
+             BackgroundColor="#0F172A">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="18" Padding="18">
+            <Frame BackgroundColor="#111827" BorderColor="#1F2937" CornerRadius="18" HasShadow="False" Padding="20">
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Swagger móvil" TextColor="White" FontSize="28" FontAttributes="Bold"/>
+                    <Label Text="La app no reemplaza Swagger, pero te da un mapa visual de los endpoints más importantes para la demo." TextColor="#CBD5E1" FontSize="13"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <Frame BackgroundColor="#172554" BorderColor="#1D4ED8" CornerRadius="18" HasShadow="False" Padding="16">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Base recomendada" TextColor="#BFDBFE" FontSize="12" FontAttributes="Bold"/>
+                    <Label Text="http://10.0.2.2:5016/" TextColor="White" FontSize="18" FontAttributes="Bold"/>
+                    <Label Text="Cambia a 8080 si levantas la API con Docker." TextColor="#BFDBFE" FontSize="12"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Flujo rápido" TextColor="White" FontSize="18" FontAttributes="Bold"/>
+                <Label Text="1. Login  2. Authorize  3. Cursos  4. Matrícula" TextColor="#94A3B8" FontSize="12"/>
+            </VerticalStackLayout>
+
+            <CollectionView ItemsSource="{Binding Endpoints}" SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:ApiEndpointCard">
+                        <Frame Margin="0,0,0,12" Padding="16" CornerRadius="16" BorderColor="#243041" HasShadow="False" BackgroundColor="#111827">
+                            <VerticalStackLayout Spacing="10">
+                                <HorizontalStackLayout Spacing="8">
+                                    <Frame Padding="10,4" CornerRadius="10" HasShadow="False" BackgroundColor="#2563EB" BorderColor="#2563EB">
+                                        <Label Text="{Binding Method}" TextColor="White" FontAttributes="Bold" FontSize="12"/>
+                                    </Frame>
+                                    <Frame Padding="10,4" CornerRadius="10" HasShadow="False" BackgroundColor="#334155" BorderColor="#334155">
+                                        <Label Text="{Binding AccessLabel}" TextColor="#E2E8F0" FontSize="12"/>
+                                    </Frame>
+                                </HorizontalStackLayout>
+
+                                <Label Text="{Binding Title}" TextColor="White" FontSize="18" FontAttributes="Bold"/>
+                                <Label Text="{Binding Path}" TextColor="#7DD3FC" FontSize="13" FontAttributes="Bold"/>
+                                <Label Text="{Binding Description}" TextColor="#CBD5E1" FontSize="13" LineBreakMode="WordWrap"/>
+
+                                <Frame IsVisible="{Binding HasExampleBody}" BackgroundColor="#0F172A" BorderColor="#334155" CornerRadius="12" Padding="12" HasShadow="False">
+                                    <VerticalStackLayout Spacing="6">
+                                        <Label Text="Ejemplo" TextColor="#94A3B8" FontSize="11" FontAttributes="Bold"/>
+                                        <Label Text="{Binding ExampleBody}" TextColor="#E2E8F0" FontFamily="Courier New" FontSize="12" LineBreakMode="WordWrap"/>
+                                    </VerticalStackLayout>
+                                </Frame>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

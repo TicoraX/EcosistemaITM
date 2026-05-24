@@ -8,7 +8,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 
-		<ApplicationTitle>GestionITM.AppMovil</ApplicationTitle>
+		<ApplicationTitle>Ecosistema ITM</ApplicationTitle>
 		<ApplicationId>com.companyname.gestionitm.appmovil</ApplicationId>
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>

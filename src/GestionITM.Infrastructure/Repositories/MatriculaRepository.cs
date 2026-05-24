@@ -25,6 +25,11 @@ namespace GestionITM.Infrastructure.Repositories
             return await _context.Matriculas.FindAsync(id);
         }
 
+        public async Task<bool> ExistsAsync(int estudianteId, int cursoId)
+        {
+            return await _context.Matriculas.AnyAsync(m => m.EstudianteId == estudianteId && m.CursoId == cursoId);
+        }
+
         public async Task<Matricula> AddAsync(Matricula matricula)
         {
             await _context.Matriculas.AddAsync(matricula);

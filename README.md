@@ -120,16 +120,18 @@ El pipeline está en [`.github/workflows/ci.yml`](.github/workflows/ci.yml). Se 
 
 ## Pruebas de Endpoints con Postman
 
-En la carpeta [postman/](file:///c:/Users/santi/OneDrive/Documents/Programacion/EcosistemaITM/postman/) se incluye la colección JSON para realizar pruebas.
+En la carpeta [postman/](postman/) se incluye la colección JSON para realizar pruebas.
 
 La colección contiene los siguientes flujos preparados:
 1. **Iniciar Sesión:** Permite enviar las credenciales del estudiante, obtener el token JWT y configurarlo de forma automática como variable de entorno en Postman.
 2. **Cursos Paginados:** Consulta el catálogo de cursos paginados para simular el comportamiento del scroll infinito.
 3. **Matricular Curso:** Envía una solicitud de matrícula autenticada con token JWT.
 4. **Matricular Curso (Sin Cupo):** Valida la regla de negocio al intentar matricular un curso sin cupos disponibles, verificando que la API retorne un código de respuesta `400 BadRequest` con un mensaje descriptivo.
+5. **Matricular Curso (Duplicada):** Verifica que una segunda matrícula del mismo estudiante al mismo curso retorne `409 Conflict` con un mensaje controlado.
 
 ---
 
-## Guía de Sustentación y Entrega
+## Documentación de Apoyo
 
-En la raíz del proyecto se encuentra el archivo `GUIA_ENTREGA.md`, el cual contiene indicaciones detalladas sobre cómo estructurar el documento PDF final y un guion sugerido para la grabación del video demostrativo de sustentación.
+- La carpeta [postman/](postman/) contiene la colección JSON para importar en Postman y replicar las pruebas.
+- El archivo [INSTALAR_APP_MOVIL.md](INSTALAR_APP_MOVIL.md) explica cómo ejecutar la app MAUI en el emulador Android.

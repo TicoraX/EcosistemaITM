@@ -32,6 +32,8 @@ public static class MauiProgram
         // Registrar Vistas y ViewModels (Inyección de Dependencias)
         builder.Services.AddTransient<LoginView>();
         builder.Services.AddTransient<LoginViewModel>();
+        builder.Services.AddTransient<ApiExplorerView>();
+        builder.Services.AddTransient<ApiExplorerViewModel>();
         builder.Services.AddTransient<CursosView>();
         builder.Services.AddTransient<CursosViewModel>();
         builder.Services.AddTransient<ProfesoresView>();

@@ -40,6 +40,10 @@ namespace GestionITM.Infrastructure.Services
             if (curso == null)
                 throw new CursoNotFoundException(matriculaDto.CursoId);
 
+            var yaMatriculado = await _matriculaRepository.ExistsAsync(matriculaDto.EstudianteId, matriculaDto.CursoId);
+            if (yaMatriculado)
+                throw new DuplicateMatriculaException(matriculaDto.EstudianteId, matriculaDto.CursoId);
+
             if (curso.CuposDisponibles <= 0)
                 throw new NoAvailableSeatsException();
 
