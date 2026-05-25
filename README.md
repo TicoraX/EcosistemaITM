@@ -85,7 +85,7 @@ La **API en terminal** solo muestra Swagger (`http://localhost:5016/swagger`). L
 #### 1) Levantar la API (terminal en la raíz del repo)
 
 ```powershell
-$env:JWT_KEY='ClaveJwtMinimo32CaracteresParaHMAC256!!'
+$env:JWT_KEY='<definir en .env o en tu sesión de PowerShell>'
 dotnet run --project src\GestionITM.API
 ```
 
@@ -99,8 +99,8 @@ dotnet run --project src\GestionITM.API
 
 Verá la pantalla de **Iniciar Sesión** (no Swagger). Credenciales demo:
 
-- Email: `estudiante.demo@correo.itm.edu.co`
-- Contraseña: `ItmDemo2026!`
+- Use las credenciales demo definidas en el archivo `.env` del proyecto.
+- No publique ni suba credenciales reales al repositorio.
 
 #### 3) URL de la API en el emulador
 
